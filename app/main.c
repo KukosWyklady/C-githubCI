@@ -3,7 +3,7 @@
 
 int main(void)
 {
-    const register int x = 10;
+    const register int x = 11;
     const register int y = 5;
 
     printf("%d + %d = %d\n", x, y, foo_add(x, y));
