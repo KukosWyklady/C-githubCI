@@ -1,6 +1,8 @@
 #include <assert.h>
 #include <foo.h>
 
+// #include <stdlib.h>
+
 int main(void)
 {
     // random tests
@@ -24,6 +26,9 @@ int main(void)
     assert(foo_div(0, 0) == 0);
     assert(foo_div(-1, 2) == 0);
     assert(foo_div(5, 3) == 1);
+
+    // int *t = malloc(1000);
+    // t[1111] = 1;
 
     return 0;
 }

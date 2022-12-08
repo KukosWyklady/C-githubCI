@@ -84,7 +84,8 @@ else ifneq (, $(filter $(CC), cc gcc))
 endif
 
 ifeq ("$(origin DEBUG)", "command line")
-	GGDB := -ggdb3
+	GGDB := -ggdb3 -gdwarf-4
+	C_OPT := -O0
 else
 	GGDB :=
 endif
@@ -126,6 +127,9 @@ regression:
 	$(Q)$(POST_EXEC_SCRIPT) $(TEST_LOG_FILE)
 	$(call print,Regression PASSED)
 
+.PHONY: memcheck
+memcheck: test
+	valgrind --leak-check=full --show-leak-kinds=all --track-origins=yes --error-exitcode=1 ./test.out
 
 .PHONY: clean
 clean:
@@ -145,7 +149,8 @@ help:
 	@echo "    all               - build app and test"
 	@echo "    app               - build only app"
 	@echo "    test              - build only test"
-	@echo "    regression        - build and run all tests"
+	@echo "    regression        - build and run all tests"\
+	@echo "    memcheck          - build test and run them using valgrind"
 	@echo -e
 	@echo "Makefile supports Verbose mode when V=1 (make all V=1)"
 	@echo "Makefile supports Debug mode when DEBUG=1 (make all DEBUG=1)"

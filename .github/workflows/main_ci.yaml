@@ -9,6 +9,7 @@ on:
 jobs:
   build:
     strategy:
+      fail-fast: false
       matrix:
         compiler: [gcc, clang]
     runs-on: ubuntu-latest
@@ -18,8 +19,11 @@ jobs:
       env:
         CC: ${{ matrix.compiler }}
       run: make
+
+
   build_debug:
     strategy:
+      fail-fast: false
       matrix:
         compiler: [gcc, clang]
     runs-on: ubuntu-latest
@@ -29,8 +33,11 @@ jobs:
       env:
         CC: ${{ matrix.compiler }}
       run: make DEBUG=1
+
+
   regression:
     strategy:
+      fail-fast: false
       matrix:
         compiler: [gcc, clang]
     runs-on: ubuntu-latest
@@ -40,8 +47,11 @@ jobs:
       env:
         CC: ${{ matrix.compiler }}
       run: make regression
+
+
   regression_debug:
     strategy:
+      fail-fast: false
       matrix:
         compiler: [gcc, clang]
     runs-on: ubuntu-latest
@@ -51,3 +61,43 @@ jobs:
       env:
         CC: ${{ matrix.compiler }}
       run: make regression DEBUG=1
+
+
+  memcheck_valgrind:
+    strategy:
+      fail-fast: false
+      matrix:
+        compiler: [gcc, clang]
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v3
+    - name: Install valgrind
+      run: |
+        sudo apt update
+        sudo apt install valgrind
+    - name: build
+      env:
+        CC: ${{ matrix.compiler }}
+      run: make test
+    - name: Run valgrind
+      run: make memcheck
+
+
+  memcheck_valgrind_debug:
+    strategy:
+      fail-fast: false
+      matrix:
+        compiler: [gcc, clang]
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v3
+    - name: Install valgrind
+      run: |
+        sudo apt update
+        sudo apt install valgrind
+    - name: build
+      env:
+        CC: ${{ matrix.compiler }}
+      run: make test DEBUG=1
+    - name: Run valgrind
+      run: make memcheck
