@@ -18,6 +18,17 @@ jobs:
       env:
         CC: ${{ matrix.compiler }}
       run: make
+  build_debug:
+    strategy:
+      matrix:
+        compiler: [gcc, clang]
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v3
+    - name: build
+      env:
+        CC: ${{ matrix.compiler }}
+      run: make DEBUG=1
   regression:
     strategy:
       matrix:
@@ -29,3 +40,14 @@ jobs:
       env:
         CC: ${{ matrix.compiler }}
       run: make regression
+  regression_debug:
+    strategy:
+      matrix:
+        compiler: [gcc, clang]
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v3
+    - name: regression
+      env:
+        CC: ${{ matrix.compiler }}
+      run: make regression DEBUG=1
